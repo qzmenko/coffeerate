@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,12 +14,12 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * @mixin IdeHelperUser
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
     use HasApiTokens;
     use HasFactory;
-    use Notifiable;
     use HasRoles;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -49,4 +51,26 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Checks if the user is an admin.
+     *
+     * @return bool
+     */
+    public function isAdmin(): bool {
+        return $this->hasRole('administrator');
+    }
+
+    /**
+     * Checks if the user can access the Filament panel.
+     *
+     * @param Panel $panel
+     *   The Filament panel to check access for.
+     * @return bool
+     *   Returns true if the user can access the Filament panel, false otherwise.
+     */
+    public function canAccessPanel(Panel $panel): bool {
+        return $this->isAdmin() && $this->hasVerifiedEmail();
+    }
+
 }
