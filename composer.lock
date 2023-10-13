@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "956a92bb05be20f5dffc19d95aa884af",
+    "content-hash": "0856c43c623a9bdf514562ae9399f495",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -4304,6 +4304,62 @@
                 }
             ],
             "time": "2023-02-08T01:06:31+00:00"
+        },
+        {
+            "name": "pawelmysior/laravel-publishable",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jaymeh/laravel-publishable.git",
+                "reference": "7c334402f25324b12671cb5215d5a3ec422407e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jaymeh/laravel-publishable/zipball/7c334402f25324b12671cb5215d5a3ec422407e7",
+                "reference": "7c334402f25324b12671cb5215d5a3ec422407e7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^10.0",
+                "nesbot/carbon": "^2.62.1",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "marcocesarato/php-conventional-changelog": "^1.15",
+                "orchestra/testbench": "^8.0",
+                "phpunit/phpunit": "^9.6.0 || ^10.0.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PawelMysior\\Publishable\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pawel Mysior",
+                    "email": "pawelmysior@gmail.com"
+                },
+                {
+                    "name": "Jamie Sykes",
+                    "email": "jaymeh@jaymeh.co.uk"
+                }
+            ],
+            "description": "Toggle the published state of your Eloquent models easily",
+            "keywords": [
+                "eloquent",
+                "laravel",
+                "trait"
+            ],
+            "support": {
+                "issues": "https://github.com/jaymeh/laravel-publishable/issues",
+                "source": "https://github.com/jaymeh/laravel-publishable/tree/3.0.0"
+            },
+            "time": "2023-03-20T14:35:09+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",

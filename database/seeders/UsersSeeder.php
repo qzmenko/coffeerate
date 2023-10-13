@@ -19,6 +19,7 @@ class UsersSeeder extends Seeder
     public function run(): void
     {
         // Create permissions.
+        Permission::create(['name' => 'create users']);
         Permission::create(['name' => 'edit users']);
         Permission::create(['name' => 'delete users']);
         Permission::create(['name' => 'block users']);
@@ -27,8 +28,9 @@ class UsersSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Create Administrator role.
-        $role = Role::create(['name' => 'Administrator']);
+        $role = Role::findOrCreate('Administrator');
         $role->givePermissionTo([
+           'create users',
            'edit users',
            'delete users',
            'block users',
