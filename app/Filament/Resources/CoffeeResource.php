@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CoffeeResource\Pages;
-use App\Filament\Resources\CoffeeResource\RelationManagers;
 use App\Models\Coffee;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CoffeeResource extends Resource
 {
@@ -113,14 +110,14 @@ class CoffeeResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -128,5 +125,5 @@ class CoffeeResource extends Resource
             'create' => Pages\CreateCoffee::route('/create'),
             'edit' => Pages\EditCoffee::route('/{record}/edit'),
         ];
-    }    
+    }
 }

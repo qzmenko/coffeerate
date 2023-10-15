@@ -3,5 +3,8 @@ includes:
 parameters:
     paths:
         - app/
+        - database/
+        - routes/
+        - _ide_helper_models.php
     # Level 9 is the highest level
     level: 5

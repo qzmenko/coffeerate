@@ -3,9 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Brand;
-use App\Models\Coffee;
-use App\Models\Flavor;
-use Database\Factories\FlavorFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;

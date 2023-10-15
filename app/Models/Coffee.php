@@ -11,25 +11,47 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+/**
+ * @mixin IdeHelperCoffee
+ */
 class Coffee extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
     use SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'description',
+        'roasting',
+        'brand_id',
+        'country_id',
+        'price',
+        'sca_grade',
+        'type',
+        'format',
+        'no_caffeine',
+        'density',
+        'acidity',
+        'bitterness',
+    ];
+
     protected $casts = [
         'roasting' => CoffeeRoasting::class,
     ];
 
-    public function brand(): BelongsTo {
+    public function brand(): BelongsTo
+    {
         return $this->belongsTo(Brand::class);
     }
 
-    public function flavors(): BelongsToMany {
+    public function flavors(): BelongsToMany
+    {
         return $this->belongsToMany(Flavor::class);
     }
 
-    public function country(): BelongsTo {
+    public function country(): BelongsTo
+    {
         return $this->belongsTo(Country::class);
     }
 }

@@ -7,13 +7,28 @@ use App\Models\User;
 
 class BrandPolicy
 {
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
+    {
+        return $user->can('view-any Brand');
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Brand $brand): bool
+    {
+        return $user->can('view Brand');
+    }
 
     /**
      * Determine whether the user can create models.
      */
     public function create(User $user): bool
     {
-        return $user->can('create brands');
+        return $user->can('create Brand');
     }
 
     /**
@@ -21,7 +36,7 @@ class BrandPolicy
      */
     public function update(User $user, Brand $brand): bool
     {
-        return $user->can('edit brands');
+        return $user->can('update Brand');
     }
 
     /**
@@ -29,7 +44,22 @@ class BrandPolicy
      */
     public function delete(User $user, Brand $brand): bool
     {
-        return $user->can('delete brands');
+        return $user->can('delete Brand');
     }
 
+    /**
+     * Determine whether the user can restore the model.
+     */
+    public function restore(User $user, Brand $brand): bool
+    {
+        return $user->can('restore Brand');
+    }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, Brand $brand): bool
+    {
+        return $user->can('force-delete Brand');
+    }
 }

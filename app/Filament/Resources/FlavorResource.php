@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\FlavorResource\Pages;
-use App\Filament\Resources\FlavorResource\RelationManagers;
 use App\Models\Flavor;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class FlavorResource extends Resource
 {
@@ -56,14 +53,14 @@ class FlavorResource extends Resource
                 ]),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -71,5 +68,5 @@ class FlavorResource extends Resource
             'create' => Pages\CreateFlavor::route('/create'),
             'edit' => Pages\EditFlavor::route('/{record}/edit'),
         ];
-    }    
+    }
 }

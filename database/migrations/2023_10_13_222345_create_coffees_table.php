@@ -1,11 +1,5 @@
 <?php
 
-use App\Enums\Coffee\CoffeeAcidity;
-use App\Enums\Coffee\CoffeeBitterness;
-use App\Enums\Coffee\CoffeeDensity;
-use App\Enums\Coffee\CoffeeFormat;
-use App\Enums\Coffee\CoffeeRoasting;
-use App\Enums\Coffee\CoffeeType;
 use App\Models\Brand;
 use App\Models\Country;
 use Illuminate\Database\Migrations\Migration;
@@ -28,7 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(Country::class)->constrained();
             $table->foreignIdFor(Brand::class)->constrained()->cascadeOnDelete();
             $table->string('roasting')->nullable();
-            $table->boolean('no_caffeine')->default(FALSE);
+            $table->boolean('no_caffeine')->default(false);
             $table->unsignedInteger('price')->nullable();
             $table->integer('sca_grade')->nullable();
             $table->string('density')->nullable();

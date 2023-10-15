@@ -14,7 +14,7 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * @mixin IdeHelperUser
  */
-class User extends Authenticatable implements MustVerifyEmail, FilamentUser
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;
@@ -54,23 +54,22 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     /**
      * Checks if the user is an admin.
-     *
-     * @return bool
      */
-    public function isAdmin(): bool {
+    public function isAdmin(): bool
+    {
         return $this->hasRole('Administrator');
     }
 
     /**
      * Checks if the user can access the Filament panel.
      *
-     * @param Panel $panel
+     * @param  Panel  $panel
      *   The Filament panel to check access for.
      * @return bool
      *   Returns true if the user can access the Filament panel, false otherwise.
      */
-    public function canAccessPanel(Panel $panel): bool {
+    public function canAccessPanel(Panel $panel): bool
+    {
         return $this->isAdmin() && $this->hasVerifiedEmail();
     }
-
 }
