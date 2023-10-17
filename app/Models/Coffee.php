@@ -38,6 +38,7 @@ class Coffee extends Model implements HasMedia
 
     protected $casts = [
         'roasting' => CoffeeRoasting::class,
+        'format' => 'array',
     ];
 
     public function brand(): BelongsTo

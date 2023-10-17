@@ -20,7 +20,7 @@ class UsersSeeder extends Seeder
         $user = User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@admin.com',
-            'password' => bcrypt('adminadmin'),
+            'password' => 'adminadmin',
         ]);
 
         $role = Role::findOrCreate('Administrator');

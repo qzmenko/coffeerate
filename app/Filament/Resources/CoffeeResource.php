@@ -2,12 +2,31 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CoffeeResource\Pages;
+use App\Enums\Coffee\CoffeeAcidity;
+use App\Enums\Coffee\CoffeeBitterness;
+use App\Enums\Coffee\CoffeeDensity;
+use App\Enums\Coffee\CoffeeFormat;
+use App\Enums\Coffee\CoffeeRoasting;
+use App\Enums\Coffee\CoffeeType;
+use App\Filament\Resources\CoffeeResource\Pages\CreateCoffee;
+use App\Filament\Resources\CoffeeResource\Pages\EditCoffee;
+use App\Filament\Resources\CoffeeResource\Pages\ListCoffees;
 use App\Models\Coffee;
-use Filament\Forms;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class CoffeeResource extends Resource
@@ -20,93 +39,125 @@ class CoffeeResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('country_id')
-                    ->relationship('country', 'name')
-                    ->required(),
-                Forms\Components\Select::make('brand_id')
-                    ->relationship('brand', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('type')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('format')
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('roasting')
-                    ->maxLength(255),
-                Forms\Components\Toggle::make('no_caffeine')
-                    ->required(),
-                Forms\Components\TextInput::make('price')
-                    ->numeric()
-                    ->prefix('$'),
-                Forms\Components\TextInput::make('sca_grade')
-                    ->numeric(),
-                Forms\Components\TextInput::make('density')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('acidity')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('bitterness')
-                    ->maxLength(255),
-            ]);
+                Group::make()
+                    ->schema([
+                        Section::make(__('General information'))
+                            ->schema([
+                                TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255),
+                                Select::make('brand_id')
+                                    ->relationship('brand', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->required(),
+                                RichEditor::make('description')
+                                    ->columnSpanFull(),
+                            ])->columns(2),
+                        Section::make(__('Coffee details'))->schema([
+                            Select::make('country_id')
+                                ->label(__('Country of origin'))
+                                ->relationship('country', 'name')
+                                ->required(),
+                            Select::make('type')
+                                ->options(CoffeeType::class),
+                            Select::make('roasting')
+                                ->options(CoffeeRoasting::class),
+                            Checkbox::make('no_caffeine')
+                                ->label(__('Caffeine free'))->columnSpanFull(),
+                            Fieldset::make()->schema([
+                                CheckboxList::make('format')
+                                    ->options(CoffeeFormat::class)
+                                    ->required()
+                                    ->columns(3)
+                                    ->columnSpanFull(),
+                            ]),
+
+                        ])->columns(2),
+
+                        Section::make(__('Flavor details'))->schema([
+                            Fieldset::make()->schema([
+                                Select::make('density')
+                                    ->options(CoffeeDensity::class),
+                                Select::make('acidity')
+                                    ->options(CoffeeAcidity::class),
+                                Select::make('bitterness')
+                                    ->options(CoffeeBitterness::class),
+                            ])
+                                ->columns(3)
+                                ->columnSpanFull(),
+                            Select::make('flavors')
+                                ->relationship('flavors', 'name')
+                                ->preload()
+                                ->createOptionForm([
+                                    TextInput::make('name')
+                                        ->required(),
+                                ])
+                                ->multiple()
+                                ->columnSpanFull(),
+                            TextInput::make('sca_grade')
+                                ->numeric(),
+                        ])->columns(2),
+                        Section::make()->schema([
+                            TextInput::make('price')
+                                ->numeric()
+                                ->prefix('₽'),
+                        ])->columns(2),
+                    ])
+                    ->columnSpan(['lg' => 2]),
+                Group::make()
+                    ->schema([
+                        Section::make(__('Status'))->schema([
+                            Toggle::make('published')
+                                ->label(__('Published'))
+                                ->onColor('success')
+                                ->offColor('danger')
+                                ->default(true),
+                        ]),
+                    ])
+                    ->columnSpan(['lg' => 1]),
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('country.name')
+                TextColumn::make('country.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('brand.name')
+                TextColumn::make('brand.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('type')
+                TextColumn::make('type')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('format')
+                TextColumn::make('format')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('roasting')
+                TextColumn::make('roasting')
                     ->searchable(),
-                Tables\Columns\IconColumn::make('no_caffeine')
-                    ->boolean(),
-                Tables\Columns\TextColumn::make('price')
+                TextColumn::make('price')
                     ->money()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('sca_grade')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('density')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('acidity')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('bitterness')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -121,9 +172,9 @@ class CoffeeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCoffees::route('/'),
-            'create' => Pages\CreateCoffee::route('/create'),
-            'edit' => Pages\EditCoffee::route('/{record}/edit'),
+            'index' => ListCoffees::route('/'),
+            'create' => CreateCoffee::route('/create'),
+            'edit' => EditCoffee::route('/{record}/edit'),
         ];
     }
 }

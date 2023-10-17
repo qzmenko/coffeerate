@@ -25,7 +25,7 @@ class CoffeeFactory extends Factory
         return [
             'name' => $this->faker->realTextBetween(10, 20),
             'type' => $this->faker->randomElement(CoffeeType::cases()),
-            'format' => $this->faker->randomElement(CoffeeFormat::cases()),
+            'format' => $this->faker->randomElements(CoffeeFormat::cases(), 2),
             'description' => $this->faker->text(),
             'price' => $this->faker->numberBetween(500, 5000),
             'sca_grade' => $this->faker->numberBetween(50, 100),
@@ -34,6 +34,7 @@ class CoffeeFactory extends Factory
             'bitterness' => $this->faker->randomElement(CoffeeBitterness::cases()),
             'roasting' => $this->faker->randomElement(CoffeeRoasting::cases()),
             'no_caffeine' => $this->faker->boolean(10),
+            'published' => $this->faker->boolean(90),
         ];
     }
 }

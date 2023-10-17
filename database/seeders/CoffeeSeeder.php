@@ -17,7 +17,6 @@ class CoffeeSeeder extends Seeder
     {
         $brands = Brand::factory()->count(20)->create();
         $countries = Country::factory()->count(10)->create();
-        $flavors = Flavor::factory()->count(10)->create();
 
         foreach ($brands as $brand) {
             $coffeeCount = rand(0, 10);

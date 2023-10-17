@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('type')->nullable();
-            $table->string('format')->nullable();
+            $table->jsonb('format')->nullable();
             $table->text('description')->nullable();
             $table->foreignIdFor(Country::class)->constrained();
             $table->foreignIdFor(Brand::class)->constrained()->cascadeOnDelete();
@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('density')->nullable();
             $table->string('acidity')->nullable();
             $table->string('bitterness')->nullable();
+            $table->boolean('published')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });
