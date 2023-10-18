@@ -19,6 +19,7 @@ use Filament\Forms\Components\Group;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -26,7 +27,10 @@ use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class CoffeeResource extends Resource
@@ -54,6 +58,13 @@ class CoffeeResource extends Resource
                                 RichEditor::make('description')
                                     ->columnSpanFull(),
                             ])->columns(2),
+                        Section::make(__('Photos'))->schema([
+                            SpatieMediaLibraryFileUpload::make('photos')
+                                ->collection('photos')
+                                ->reorderable()
+                                ->hiddenLabel()
+                                ->multiple(),
+                        ]),
                         Section::make(__('Coffee details'))->schema([
                             Select::make('country_id')
                                 ->label(__('Country of origin'))
@@ -123,22 +134,32 @@ class CoffeeResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('country.name')
-                    ->numeric()
-                    ->sortable(),
+                SpatieMediaLibraryImageColumn::make('photos')
+                    ->collection('photos')
+                    ->label(__('Photo'))
+                    ->limit(1)
+                    ->circular()
+                    ->width(60)
+                    ->height(60),
+                TextColumn::make('name')
+                    ->limit(15)
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('brand.name')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('type')
-                    ->searchable(),
+                TextColumn::make('country.name')
+                    ->numeric()
+                    ->limit(15),
+                TextColumn::make('type'),
                 TextColumn::make('format')
-                    ->searchable(),
-                TextColumn::make('roasting')
-                    ->searchable(),
+                    ->listWithLineBreaks()
+                    ->bulleted()
+                    ->formatStateUsing(fn (string $state): string => CoffeeFormat::from($state)->getLabel()),
+                TextColumn::make('roasting'),
                 TextColumn::make('price')
-                    ->money()
+                    ->money('RUB')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -150,8 +171,12 @@ class CoffeeResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
-            ])
+                SelectFilter::make('type')
+                    ->options(CoffeeType::class),
+                SelectFilter::make('roasting')
+                    ->multiple()
+                    ->options(CoffeeRoasting::class),
+            ], layout: FiltersLayout::AboveContent)
             ->actions([
                 EditAction::make(),
             ])
@@ -159,7 +184,9 @@ class CoffeeResource extends Resource
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->deferLoading()
+            ->defaultSort('updated_at', 'desc');
     }
 
     public static function getRelations(): array

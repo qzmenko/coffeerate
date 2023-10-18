@@ -14,6 +14,7 @@ enum CoffeeFormat: string implements HasLabel
     case CAPSULES = 'capsules';
     case DRIP = 'drip';
     case INSTANT = 'instant';
+    case CANNED = 'canned';
 
     public function getLabel(): ?string
     {
@@ -23,6 +24,7 @@ enum CoffeeFormat: string implements HasLabel
             self::CAPSULES => __('Capsules'),
             self::DRIP => __('Drip'),
             self::INSTANT => __('Instant'),
+            self::CANNED => __('Canned'),
         };
     }
 }

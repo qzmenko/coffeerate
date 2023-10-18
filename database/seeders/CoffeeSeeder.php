@@ -10,6 +10,8 @@ use Illuminate\Database\Seeder;
 
 class CoffeeSeeder extends Seeder
 {
+    use AttachMediaTrait;
+
     /**
      * Run the database seeds.
      */
@@ -26,7 +28,10 @@ class CoffeeSeeder extends Seeder
                     ->for($brand)
                     ->has(Flavor::factory()->count($flavorsCount))
                     ->for($countries->random())
-                    ->create();
+                    ->create()
+                    ->each(function (Coffee $coffee) {
+                        $this->attachMediasFromDirectory($coffee, rand(1, 5));
+                    });
             }
         }
     }
