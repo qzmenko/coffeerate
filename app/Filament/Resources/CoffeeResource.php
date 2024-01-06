@@ -204,4 +204,10 @@ class CoffeeResource extends Resource
             'edit' => EditCoffee::route('/{record}/edit'),
         ];
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
 }

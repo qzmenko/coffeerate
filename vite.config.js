@@ -11,4 +11,17 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    css: {
+        devSourcemap: true,
+    },
+    server: {
+        https: false,
+        host: true,
+        strictPort: true,
+        port: 3009,
+        hmr: {host: 'localhost', protocol: 'ws'},
+        watch: {
+            usePolling: true,
+        }
+    },
 });
