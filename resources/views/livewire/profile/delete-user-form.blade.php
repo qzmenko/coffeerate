@@ -53,14 +53,13 @@ new class extends Component
 
                 <x-text-input
                     wire:model="password"
+                    :errors="$errors->get('password')"
                     id="password"
                     name="password"
                     type="password"
                     class="mt-1 block w-3/4"
                     placeholder="{{ __('Password') }}"
                 />
-
-                <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
 
             <div class="mt-6 flex justify-end">
